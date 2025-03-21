@@ -28,7 +28,7 @@ while machine_isOn == True:
     if isSufficient == False:
         continue
     
-
+    
     # print("Please insert coins. ")
     # quarters_qnt = int(input("How many quarters?: "))
     # dimes_qnt = int(input("How many dimes?: "))
