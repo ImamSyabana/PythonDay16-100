@@ -19,3 +19,4 @@ print("You've completed the quiz")
 print("Your final score was: {score}/{outOf}".format(score = quizObjek.score, outOf = quizObjek.question_number))
 
 print("reboisasi")
+print("reboisasi")
