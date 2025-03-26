@@ -20,3 +20,5 @@ print("Your final score was: {score}/{outOf}".format(score = quizObjek.score, ou
 
 print("reboisasi")
 print("reboisasi")
+print("reboisasi")
+print("reboisasi")
