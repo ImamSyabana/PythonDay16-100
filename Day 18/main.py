@@ -58,6 +58,7 @@ def goRight():
     ninjaTurtle.forward(20)
     
 def goBackwards():
+    ninjaTurtle.right(180)
     ninjaTurtle.backward(20)
 
 fungsiList = [goRight, goStraight, goBackwards, goLeft]
