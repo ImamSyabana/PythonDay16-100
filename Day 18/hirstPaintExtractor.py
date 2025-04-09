@@ -3,7 +3,7 @@ import colorgram
 # extract 12 warna dari gambar yang dipilih
 # warna yang diekstrak berdasarkan warna yang paling mendominasi
 
-color= colorgram.extract(r'D:\_Coolyeah\Udemy\100Days Python\Day 18\image.jpg', 12)
+color= colorgram.extract(r'D:\_Coolyeah\Udemy\100Days Python\Day 18\image2.jpg', 25)
 
 print(color[0].rgb.r)
 

@@ -104,5 +104,7 @@ for x in range(circleNumber):
     ninjaTurtle.circle(100)
 
     currentHeading = ninjaTurtle.heading()
+    
+    
 screen = Screen()
 screen.exitonclick()
