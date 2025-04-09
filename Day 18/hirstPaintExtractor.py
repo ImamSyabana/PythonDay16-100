@@ -22,3 +22,5 @@ for x in range(len(color)):
     colorTuppleCollection.append(rgbExtractor(rgbTemp[0], rgbTemp[1], rgbTemp[2]))
     
 print(colorTuppleCollection)
+
+colorList = [(199, 176, 117), (124, 37, 24), (208, 221, 212), (166, 106, 57), (6, 57, 83), (185, 158, 54), (220, 224, 228), (108, 68, 84), (113, 161, 175), (40, 37, 35)]
