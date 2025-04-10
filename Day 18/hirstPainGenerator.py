@@ -26,6 +26,7 @@ for baris in range(10):
     ninjaTurtle.setx(-250)
 
 print("reboisasi")
+print("reboisasi")
 
 
 
