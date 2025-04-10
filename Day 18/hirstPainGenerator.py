@@ -25,7 +25,7 @@ for baris in range(10):
     ninjaTurtle.sety(-250 + ((baris + 1) * 50))
     ninjaTurtle.setx(-250)
 
-
+print("reboisasi")
 
 
 
