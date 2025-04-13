@@ -27,6 +27,10 @@ for baris in range(10):
 
 print("reboisasi")
 print("reboisasi")
+print("reboisasi")
+print("reboisasi")
+print("reboisasi")
+print("reboisasi")
 
 
 
