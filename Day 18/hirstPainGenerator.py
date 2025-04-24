@@ -42,6 +42,9 @@ print("reboisasi")
 print("reboisasi")
 print("reboisasi")
 print("reboisasi")
+print("reboisasi")
+print("reboisasi")
+print("reboisasi")
 
 
 
