@@ -27,19 +27,18 @@ screen.onkey(left_paddle.up, "w")
 
 game_is_on = True
 
-#menentukan arah gerakan pertama
-ball.setheading(45)
-
 while game_is_on:
     screen.update()
     time.sleep(0.1)
     
+    # menggerakan bola pertama ke kanan atas
+    ball.move()
     
-    ball.ball_physics()
+    # detect collision with wall
+    if ball.ycor() >290 or ball.ycor() < -290:
+        ball.bounce()
     
     
-    # if ball.xcor() > 390 or ball.ycor() > 290:
-    #     game_is_on = False
         
 screen.exitonclick()
 

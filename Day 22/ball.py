@@ -8,11 +8,13 @@ class Ball(Turtle):
         self.shapesize(stretch_len=1, stretch_wid=1)
         self.penup()
         self.goto(x=-200, y=0)
+        self.x_move = 10
+        self.y_move = 10
         
-    def ball_physics(self):
-
+    def move(self):
+        new_x = self.xcor() + self.x_move
+        new_y = self.ycor() + self.y_move
+        self.goto(x = new_x, y = new_y)
         
-        self.forward(10)
-
-        if self.ycor() > 290:
-            self.right(90)
+    def bounce(self):
+        self.y_move = self.y_move * -1
