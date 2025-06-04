@@ -50,7 +50,7 @@ while game_is_on:
     if ball.distance(right_paddle) < 50 and ball.xcor() > 320 or ball.distance(left_paddle) < 50 and ball.xcor() < -320:
         ball.bounce_x()
         ball.move_speed = ball.move_speed * 0.9
-        print(ball.move_speed)
+        #print(ball.move_speed)
         
     #detect if the ball pass the right paddle
     if ball.xcor() > 380:
