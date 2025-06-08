@@ -1,6 +1,6 @@
 import time
 from turtle import Screen
-from player import Player
+from player import Player, FINISH_LINE_Y
 from car_manager import CarManager, MOVE_INCREMENT
 from scoreboard import Scoreboard
 import random
@@ -26,7 +26,7 @@ while game_is_on:
     time.sleep(0.1)
     screen.update()
     
-    if turtle.ycor() > 280:
+    if turtle.ycor() > FINISH_LINE_Y:
         turtle.goto(turtle.start_pos)
         tambah_kecepatan = tambah_kecepatan + MOVE_INCREMENT
         scoreboard.addScore()
