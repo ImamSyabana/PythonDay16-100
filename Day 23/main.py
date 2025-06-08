@@ -26,7 +26,7 @@ while game_is_on:
     time.sleep(0.1)
     screen.update()
     
-    if turtle.ycor() > 250:
+    if turtle.ycor() > 280:
         turtle.goto(turtle.start_pos)
         tambah_kecepatan = tambah_kecepatan + MOVE_INCREMENT
         scoreboard.addScore()
