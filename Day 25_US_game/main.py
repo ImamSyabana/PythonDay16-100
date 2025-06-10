@@ -73,6 +73,7 @@ for state in state_list:
     if state not in correct_guessed_state:
         missed_state.append(state)
 
+print(f"Missed states: {missed_state}")
 # Converting to csv
 missed_state_dict = {"state to learn": missed_state}
 
