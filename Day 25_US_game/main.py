@@ -68,10 +68,13 @@ while len(state_list) > 0:
 state_list = dataset["state"]
 state_list = state_list.to_list()
 
-missed_state = []
-for state in state_list:
-    if state not in correct_guessed_state:
-        missed_state.append(state)
+
+# ini bisa dirubah make list comprehension
+missed_state = [state for state in state_list if state not in correct_guessed_state]
+
+# for state in state_list:
+#     if state not in correct_guessed_state:
+#         missed_state.append(state)
 
 print(f"Missed states: {missed_state}")
 # Converting to csv
