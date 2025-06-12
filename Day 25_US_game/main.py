@@ -79,5 +79,5 @@ missed_state_dict = {"state to learn": missed_state}
 
 df = pd.DataFrame(missed_state_dict)
 
-# saving to a csv file 
+# saving to a csv file.
 df.to_csv("Day 25_US_game/state_to_learn.csv")
