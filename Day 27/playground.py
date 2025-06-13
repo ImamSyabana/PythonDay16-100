@@ -24,3 +24,12 @@ def calculate(n, **kwargs):
     return n
 
 print(calculate(2, add = 3, multiply = 5))
+
+
+class Car:
+    
+    def __init__ (self, **kwargs):
+        self.make = kwargs.get("make") # kalo make kwargs["make"] kalo key "make" nya ga ada bakal error
+        self.model = kwargs.get("model") # kalo make .get waktu key model nya ga punya value bakal ngasihh None bukan error 
+        self.colour = kwargs.get("colour")
+        self.seats = kwargs.get("seats")
