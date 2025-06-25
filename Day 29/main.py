@@ -42,7 +42,15 @@ Password_input.grid(column=1, row = 3)
 gen_password = tkinter.Button(text = "generate password")
 gen_password.grid(column=2, row = 3)
 
-add_btn = tkinter.Button(text = "Add", width=35)
+def save_file():
+    with open("Day 29/pass_saveFile.txt", "a") as f:
+        f.write(f"{website_input.get()} | {userName_input.get()} | {Password_input.get()}\n")
+        
+    website_input.delete(0, "end")
+    Password_input.delete(0, "end")
+    
+    
+add_btn = tkinter.Button(text = "Add", width=35, command=save_file)
 add_btn.grid(column=1, row = 4,columnspan=2)
 
 
