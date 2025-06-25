@@ -9,16 +9,16 @@ numbers = [int(conv) for conv in list_of_strings]
 result = [intgr for intgr in numbers if intgr % 2 == 0]
 print(result)
 
-# Challenge 17
-file1 = open("file1.txt")
-file1_num = [n1 for n1 in file1.readlines()]
+# # Challenge 17
+# file1 = open("file1.txt")
+# file1_num = [n1 for n1 in file1.readlines()]
 
-file2 = open("file2.txt")
-file2_num = [n2 for n2 in file2.readlines()]
+# file2 = open("file2.txt")
+# file2_num = [n2 for n2 in file2.readlines()]
 
-result = [int(n1n2.strip("\n")) for n1n2 in file1_num if n1n2 in file2_num]
+# result = [int(n1n2.strip("\n")) for n1n2 in file1_num if n1n2 in file2_num]
 
-print(result)
+# print(result)
 
-file1.close()
-file2.close()
+# file1.close()
+# file2.close()
