@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import messagebox
 
 FONT_NAME = "Courier"
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -43,11 +44,30 @@ gen_password = tkinter.Button(text = "generate password")
 gen_password.grid(column=2, row = 3)
 
 def save_file():
-    with open("Day 29/pass_saveFile.txt", "a") as f:
-        f.write(f"{website_input.get()} | {userName_input.get()} | {Password_input.get()}\n")
+    
+    if len(website_input.get()) == 0 or len(Password_input.get()) == 0:
+        messagebox.showwarning(
+            title="Oops",
+            message=f"Please don't leave any fields empty!"
+        )
+        is_ok = None
         
-    website_input.delete(0, "end")
-    Password_input.delete(0, "end")
+    else:
+        is_ok = messagebox.askokcancel(
+        title = website_input.get(), 
+        message=f"These are the details entered: \nEmail: {userName_input.get()} \nPassword: {Password_input.get()} \nIs it ok to save?"
+    
+        
+    )
+
+    if is_ok == None:
+        pass
+    elif is_ok:
+        with open("Day 29/pass_saveFile.txt", "a") as f:
+            f.write(f"{website_input.get()} | {userName_input.get()} | {Password_input.get()}\n")
+            
+        website_input.delete(0, "end")
+        Password_input.delete(0, "end")
     
     
 add_btn = tkinter.Button(text = "Add", width=35, command=save_file)
