@@ -40,7 +40,6 @@ def start_timer():
         count_down(short_break_sec)
         title_label.config(text="Short break!", fg = PINK)
 
-
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 import math
 def count_down(count):

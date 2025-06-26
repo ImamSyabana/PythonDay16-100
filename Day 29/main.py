@@ -131,8 +131,8 @@ def find_password():
                 
             else:
                 messagebox.showinfo(
-                title = "Data found", 
-                message=f"Website: {website_input.get()} \nPassword: {data[website_input.get()]["password"] }"
+                title = website_input.get(), 
+                message=f"Email: {data[website_input.get()]["email"] } \nPassword: {data[website_input.get()]["password"] }"
                 )
             
 # ---------------------------- UI SETUP ------------------------------- #
