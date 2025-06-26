@@ -130,7 +130,7 @@ def find_password():
             )
                 
             else:
-                messagebox.askokcancel(
+                messagebox.showinfo(
                 title = "Data found", 
                 message=f"Website: {website_input.get()} \nPassword: {data[website_input.get()]["password"] }"
                 )
