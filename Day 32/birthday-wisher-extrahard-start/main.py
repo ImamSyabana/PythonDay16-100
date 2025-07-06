@@ -39,7 +39,7 @@ if curr_day == (list_bday.loc[1, ("day")]) and curr_month == (list_bday.loc[1, (
         
         
         
-# 4. Send the letter generated in step 3 to that person's email address.
+# 4 Send the letter generated in step 3 to that person's email address.
         my_email = "expensivebonlap@gmail.com"
         my_password = "otlcxftlknqbeype"
         
