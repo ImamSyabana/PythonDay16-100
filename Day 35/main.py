@@ -30,7 +30,7 @@ response.raise_for_status()
 
 #print response ke console
 weather_data = response.json()
-#print(weather_data)
+print(weather_data)
 
 weather_pred_list = []
 weather_pred_dict = {}
