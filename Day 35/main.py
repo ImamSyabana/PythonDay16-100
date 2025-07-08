@@ -1,7 +1,17 @@
 import requests
 import smtplib
 
-API_KEY = '7bf142ccce56a6de116d1d154358474d'
+import os
+from dotenv import find_dotenv, load_dotenv
+
+# mencari lokasi file .env secara otomatis 
+dotenv_path = find_dotenv()
+
+# load the entries as environtment variables
+load_dotenv(dotenv_path)
+
+# stored the env variables within a python variable
+API_KEY = os.getenv("API_KEY")
 
 # mendapat latitude longitut
 parameters = {
