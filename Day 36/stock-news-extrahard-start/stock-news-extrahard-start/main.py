@@ -11,30 +11,29 @@ COMPANY_NAME = "Tesla Inc"
 
 
 
-# STOCK_API = "EJV3S15R1DL8FSI6"
+STOCK_API = "EJV3S15R1DL8FSI6"
 
-# stockAPI_parameters = {
-#     "function" : "TIME_SERIES_DAILY",
-#     "symbol" : STOCK,
-#     "outputsize":"compact",
-#     "apikey" : STOCK_API
+stockAPI_parameters = {
+    "function" : "TIME_SERIES_DAILY",
+    "symbol" : STOCK,
+    "outputsize":"compact",
+    "apikey" : STOCK_API
     
-# }
+}
 
-# response_stock_api = requests.get("https://www.alphavantage.co/query?", params=stockAPI_parameters)
-# response_stock_api.raise_for_status()
+response_stock_api = requests.get("https://www.alphavantage.co/query?", params=stockAPI_parameters)
+response_stock_api.raise_for_status()
 
-# data = response_stock_api.json()
+data = response_stock_api.json()
 
-# #print(data["Time Series (Daily)"])
+#print(data["Time Series (Daily)"])
 
-# close_stock_data = [float(value["4. close"]) for tgl, value in data["Time Series (Daily)"].items()]
-
-
+close_stock_data = [float(value["4. close"]) for tgl, value in data["Time Series (Daily)"].items()]
 
 
-# BUAT SEMENTARA KALO KENA LIMIT MAKE API ALPHAVANTAGE
-close_stock_data = [293.94, 315.35, 315.65, 300.71, 317.66, 323.63, 325.78, 327.55, 340.47, 348.68, 322.16, 322.05, 316.35, 329.13, 325.31, 319.11, 326.43, 326.09, 308.58, 295.14, 284.7, 332.05, 344.27, 342.69, 346.46, 358.43, 356.9, 362.89, 339.34, 341.04, 334.62, 343.82, 342.09, 349.98, 342.82, 347.68, 334.07, 318.38, 298.26, 284.82, 276.22, 275.35, 280.26, 287.21, 280.52, 282.16, 292.03, 285.88, 284.95, 259.51, 250.74, 237.97, 227.5, 241.37, 241.55, 254.11, 252.35, 252.31, 252.4, 272.2, 221.86, 233.29, 239.43, 267.28, 282.76, 268.46, 259.16, 263.55, 273.13, 272.06, 288.14, 278.39, 248.71, 236.26, 235.86, 225.31, 238.01, 249.98, 240.68, 248.09, 230.58, 222.15, 262.67, 263.45, 279.1, 272.04, 284.65, 292.98, 281.95, 290.8, 302.8, 330.53, 337.8, 354.4, 360.56, 354.11, 355.84, 355.94, 336.51, 328.5]
+
+# # BUAT SEMENTARA KALO KENA LIMIT MAKE API ALPHAVANTAGE
+# close_stock_data = [293.94, 315.35, 315.65, 300.71, 317.66, 323.63, 325.78, 327.55, 340.47, 348.68, 322.16, 322.05, 316.35, 329.13, 325.31, 319.11, 326.43, 326.09, 308.58, 295.14, 284.7, 332.05, 344.27, 342.69, 346.46, 358.43, 356.9, 362.89, 339.34, 341.04, 334.62, 343.82, 342.09, 349.98, 342.82, 347.68, 334.07, 318.38, 298.26, 284.82, 276.22, 275.35, 280.26, 287.21, 280.52, 282.16, 292.03, 285.88, 284.95, 259.51, 250.74, 237.97, 227.5, 241.37, 241.55, 254.11, 252.35, 252.31, 252.4, 272.2, 221.86, 233.29, 239.43, 267.28, 282.76, 268.46, 259.16, 263.55, 273.13, 272.06, 288.14, 278.39, 248.71, 236.26, 235.86, 225.31, 238.01, 249.98, 240.68, 248.09, 230.58, 222.15, 262.67, 263.45, 279.1, 272.04, 284.65, 292.98, 281.95, 290.8, 302.8, 330.53, 337.8, 354.4, 360.56, 354.11, 355.84, 355.94, 336.51, 328.5]
 
 #print(close_stock_data)
 

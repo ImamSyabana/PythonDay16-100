@@ -11,14 +11,14 @@ dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
 # stored the env variables within a python variable
-API_KEY = os.getenv("API_KEY")
+API_KEY_openweather = os.getenv("API_KEY")
 
 # mendapat latitude longitut
 parameters = {
     "lat":-6.259037,
     "lon":107.118540,
     "cnt": 4,
-    "appid": API_KEY
+    "appid": API_KEY_openweather
 }
 
 # membuat request ke API forecast
