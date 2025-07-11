@@ -18,7 +18,6 @@ stockAPI_parameters = {
     "symbol" : STOCK,
     "outputsize":"compact",
     "apikey" : STOCK_API
-    
 }
 
 response_stock_api = requests.get("https://www.alphavantage.co/query?", params=stockAPI_parameters)
