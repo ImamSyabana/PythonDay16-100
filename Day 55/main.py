@@ -11,29 +11,26 @@ def hello_world():
 def make_bold(function):
     def wrapper_function():
 
-        function()
+        return f'<b>{function()}</b>'
     return wrapper_function
     
 def make_emphasis(function):
     def wrapper_function():
 
-        #Do something before
-        function()
-        function()
-        #Do something after
+        return f'<em>{function()}</em>'
     return wrapper_function
 
 def make_underlined(function):
     def wrapper_function():
      
-        #Do something before
-        function()
-        function()
-        #Do something after
+        return f'<u>{function()}</u>'
     return wrapper_function
     
     
 @app.route("/bye")
+@make_bold
+@make_emphasis
+@make_underlined
 def goodbye():
     return "good bye"
 
