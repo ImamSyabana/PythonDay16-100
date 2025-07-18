@@ -44,6 +44,13 @@ def AGEnNAMEpredictor(inputtedName):
     
     return render_template("API_Predictor.html", userName = name, predAge = predicted_age, predGender = predicted_gener)
 
-    
+@app.route('/more/blog/<int:num>')
+def get_blog(num):
+    print(num)
+    blog_url = "https://api.npoint.io/538a50d879cec785affc"
+    response = requests.get(blog_url)
+    all_posts = response.json()
+    return render_template("blog.html", posts = all_posts)
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
