@@ -142,3 +142,6 @@ window.mainloop() #
 # reboisasi
 
 # reboisasi
+# reboisasi
+# reboisasi
+# reboisasi
