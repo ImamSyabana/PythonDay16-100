@@ -45,7 +45,7 @@ def receive_data():
                             msg=f"Subject:New Message\n\nName:{name}\nEmail:{email}\nPhone:{phone}\nMessage:{message}")
 
 
-    return f"<h1>Successfully sent your message </h1>"
+    #return f"<h1>Successfully sent your message </h1>"
 
 
 @app.route("/post/<int:index>")
