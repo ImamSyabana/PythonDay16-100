@@ -67,6 +67,7 @@ def add_cafe():
         with open('Day 62/cafe-data.csv', 'a', newline='',  encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(data)
+    
     # Exercise:
     # Make the form write a new row into cafe-data.csv
     # with   if form.validate_on_submit()
