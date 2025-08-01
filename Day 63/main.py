@@ -6,6 +6,9 @@ from wtforms.validators import DataRequired, InputRequired, Email, Length, URL
 import csv
 from flask_bootstrap import Bootstrap5
 from markupsafe import Markup
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Integer, String, Float
 '''
 Red underlines? Install the required packages first: 
 Open the Terminal in PyCharm (bottom left). 
@@ -18,9 +21,20 @@ pip3 install -r requirements.txt
 
 This will install the packages from requirements.txt for this project.
 '''
+# inisiasi database
+class Base(DeclarativeBase):
+  pass
+
+
+db = SQLAlchemy(model_class=Base)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///new-books-collection-final.db"
+
+# initialize the app with the extension
+db.init_app(app)
 
 all_books = []
 
@@ -32,8 +46,24 @@ class BookForm(FlaskForm):
     rating = StringField(label = 'Rating', validators=[DataRequired()])
     submit = SubmitField('Add Book')
 
+# MEMBUAT DATABASE
+# define table named books yang akan dibuat
+class Books_db(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    book_title: Mapped[str] = mapped_column(nullable=False, unique=True, type_=String(250))
+    author: Mapped[str] = mapped_column(nullable=False, type_=String(250))
+    rating: Mapped[float] = mapped_column(nullable=False)
+
+# create table yang telah di defined
+with app.app_context():
+    db.create_all()
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    with app.app_context():
+        result = db.session.execute(db.select(Books_db).order_by(Books_db.book_title))
+        #all_books = result.scalars()
+        all_books = list(result.scalars())
     return render_template("index.html", books = all_books)
 
 
@@ -52,9 +82,41 @@ def add():
             "rating": rating
         }
 
-        all_books.append(temp_dict)
-        print(all_books)
-    return render_template("add.html", books = all_books, form = form)
+       
+
+        book_record = Books_db(
+             book_title= temp_dict["title"],
+             author= temp_dict["author"],
+             rating = temp_dict["rating"])
+
+        # menambahkan data ke datatbase.
+        with app.app_context():
+            db.session.add(book_record)
+            db.session.commit()
+
+    return render_template("add.html", form = form)
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit_rating():
+    # Get the book_id from the URL query string
+    book_id = request.args.get('id', type=int)
+    if not book_id:
+        return "Missing book ID", 400
+
+    # Load the book from the database
+    with app.app_context():
+        book_to_update = db.get_or_404(Books_db, book_id)
+
+    # Handle the POST request (form submission)
+    if request.method == 'POST':
+        new_rating = request.form.get('rating')
+        with app.app_context():
+            book_to_update.rating = float(new_rating)
+            db.session.commit()
+        return redirect(url_for('home'))
+
+    # Render the form for GET request
+    return render_template("edit.html", book=book_to_update)
 
 
 if __name__ == "__main__":

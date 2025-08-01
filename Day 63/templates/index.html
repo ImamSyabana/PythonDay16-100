@@ -11,7 +11,10 @@
         <p>Library is empty.</p>
       {% else: %}
         {% for book in books: %}
-          <li>{{ book["title"] ~ ' - ' ~ book["author"] ~ ' - ' ~ book["rating"] }}</li>
+          <li>
+            {{ book.book_title ~ ' - ' ~ book.author ~ ' - ' ~ book.rating ~ '/10' }}
+            <a href="{{url_for('edit_rating', id=book.id)}}">Edit Rating</a>
+          </li>
         {% endfor %}
       {% endif %}
     </ul>
