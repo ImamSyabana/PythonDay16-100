@@ -40,12 +40,19 @@ all_books = []
 
 Bootstrap5(app)
 
+# form untuk entry
 class BookForm(FlaskForm):
     book = StringField(label = 'Book Name', validators=[DataRequired()])
     author = StringField(label = 'Book Author', validators=[DataRequired()])
     rating = StringField(label = 'Rating', validators=[DataRequired()])
     submit = SubmitField('Add Book')
 
+# form untuk editt rating
+class EditForm(FlaskForm):
+    edited_rating = StringField(label = '',
+                                validators=[DataRequired()],
+                                render_kw={'placeholder': 'New Rating'})
+    
 # MEMBUAT DATABASE
 # define table named books yang akan dibuat
 class Books_db(db.Model):
@@ -70,7 +77,7 @@ def home():
 @app.route("/add", methods=['GET', 'POST'])
 def add():
     form = BookForm()
-
+    
     if form.validate_on_submit():
         book = form.book.data
         author = form.author.data
@@ -100,23 +107,33 @@ def add():
 def edit_rating():
     # Get the book_id from the URL query string
     book_id = request.args.get('id', type=int)
-    if not book_id:
-        return "Missing book ID", 400
 
     # Load the book from the database
     with app.app_context():
         book_to_update = db.get_or_404(Books_db, book_id)
 
-    # Handle the POST request (form submission)
-    if request.method == 'POST':
-        new_rating = request.form.get('rating')
-        with app.app_context():
-            book_to_update.rating = float(new_rating)
-            db.session.commit()
-        return redirect(url_for('home'))
+    editform = EditForm()
+    
+    if editform.validate_on_submit():
+        rating = editform.edited_rating.data
+        
+        temp_rating = {
+            "rating": rating
+        }
+        
+        edit_record =Books_db(
+             rating = temp_rating["rating"])
+        
+    # # Handle the POST request (form submission)
+    # if request.method == 'POST':
+    #     new_rating = request.form.get('rating')
+    #     with app.app_context():
+    #         book_to_update.rating = float(new_rating)
+    #         db.session.commit()
+    #     return redirect(url_for('home'))
 
     # Render the form for GET request
-    return render_template("edit.html", book=book_to_update)
+    return render_template("edit.html", book=book_to_update, form = editform)
 
 
 if __name__ == "__main__":

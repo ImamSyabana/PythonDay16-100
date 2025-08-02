@@ -1,3 +1,4 @@
+{% from 'bootstrap/form.html' import render_form %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,5 +9,8 @@
 <body>
     <p>Book Name: {{ book.book_title }}</p>
     <p>Current Rating: {{ book.rating }}</p>
+    <form action="" method="POST">
+      {{render_form(form, novalidate=True)}}
+    </form>
 </body>
 </html>
