@@ -52,6 +52,7 @@ class EditForm(FlaskForm):
     edited_rating = StringField(label = '',
                                 validators=[DataRequired()],
                                 render_kw={'placeholder': 'New Rating'})
+    submit = SubmitField('Change Rating')
     
 # MEMBUAT DATABASE
 # define table named books yang akan dibuat
@@ -107,7 +108,7 @@ def add():
 def edit_rating():
     # Get the book_id from the URL query string
     book_id = request.args.get('id', type=int)
-
+	
     # Load the book from the database
     with app.app_context():
         book_to_update = db.get_or_404(Books_db, book_id)
@@ -121,20 +122,34 @@ def edit_rating():
             "rating": rating
         }
         
-        edit_record =Books_db(
-             rating = temp_rating["rating"])
         
-    # # Handle the POST request (form submission)
-    # if request.method == 'POST':
-    #     new_rating = request.form.get('rating')
-    #     with app.app_context():
-    #         book_to_update.rating = float(new_rating)
-    #         db.session.commit()
-    #     return redirect(url_for('home'))
+        # Load the book from the database
+        with app.app_context():
+            # rating yang mau diupdatte
+            rating_to_update = db.session.execute(db.select(Books_db).where(Books_db.id == book_id)).scalar()
+            #rating pengganti
+            rating_to_update.rating = temp_rating["rating"]
+            db.session.commit()
 
     # Render the form for GET request
     return render_template("edit.html", book=book_to_update, form = editform)
 
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete_records():
+    # Get the book_id from the URL query string
+    book_id = request.args.get('id', type=int)
+
+    # Load the book from the database
+    with app.app_context():
+        # records yang mau dihapus
+        book_to_delete = db.session.execute(db.select(Books_db).where(Books_db.id == book_id)).scalar()
+        db.session.delete(book_to_delete)
+        db.session.commit()
+
+    # Render the form for GET request
+    return redirect(url_for('home'))
 
 if __name__ == "__main__":
     app.run(debug=True)
