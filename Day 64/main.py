@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired
 import requests
 import os
 from dotenv import find_dotenv, load_dotenv
+from flask import session
 '''
 Red underlines? Install the required packages first: 
 Open the Terminal in PyCharm (bottom left). 
@@ -37,6 +38,9 @@ class EditForm(FlaskForm):
     edited_review= StringField(label = '',
                                 validators=[DataRequired()],
                                 render_kw={'placeholder': 'New Review'})
+    # edited_ranking= StringField(label = '',
+    #                             validators=[DataRequired()],
+    #                             render_kw={'placeholder': 'New Ranking'})
     submit = SubmitField('Change Rating')
 
 class AddForm(FlaskForm):
@@ -62,7 +66,7 @@ class Movies_db(db.Model):
     year : Mapped[str] = mapped_column(nullable=False, type_=String(4))
     description : Mapped[str] = mapped_column(nullable=False, type_=String(250))
     rating: Mapped[float] = mapped_column(nullable=False)
-    ranking: Mapped[int] = mapped_column(nullable=False)
+    ranking: Mapped[int] = mapped_column(nullable=True)
     review: Mapped[str] = mapped_column(nullable=False, type_=String(250))
     img_url: Mapped[str] = mapped_column(nullable=False)
 
@@ -100,9 +104,14 @@ second_movie = Movies_db(
 @app.route("/")
 def home():
     with app.app_context():
-        result = db.session.execute(db.select(Movies_db).order_by(Movies_db.ranking.desc()))
+        result = db.session.execute(db.select(Movies_db).order_by(Movies_db.rating.asc()))
         #all_movies = result.scalars()
         all_movies = list(result.scalars())
+
+        for x in range(len(all_movies)):
+            rank = (len(all_movies) - x)
+            all_movies[x].ranking = rank
+        
     return render_template("index.html", movies = all_movies)
 
 @app.route("/add", methods=['GET', 'POST'])
@@ -144,7 +153,7 @@ def add_records():
 
         URL =  f"https://api.themoviedb.org/3/search/movie?query={parameters['query']}&include_adult={parameters['include_adult']}&language={parameters['language']}&page={parameters['page']}"
 
-        # membuatt requesttt ke API forecast
+        # membuatt request ke API forecast
         response = requests.get(url = URL, headers = headers_dict)
         response.raise_for_status()
 
@@ -153,22 +162,56 @@ def add_records():
 
         results = search_result['results']
 
-        return redirect(url_for('select_results', query=title))
+        return render_template('select.html', results = results)
 
 
     return render_template('add.html', form = form)
 
-@app.route('/select', methods= ['GET', 'POST'])
-def select_results():
-    movie_id = request.args.get('query', type=int)
+@app.route('/<int:id>', methods= ['GET', 'POST'])
+def select_results(id):
+    movie_id = id
+    #print(movie_id)
 
-    return render_template('select.html')
+    # use the id to fetch all the data from Movie Database API on that movie
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
+
+    headers = os.getenv("headers_TMDB")
+
+    headers_dict = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {headers}"
+    }
+
+    response = requests.get(url = url, headers=headers_dict)
+
+    response.raise_for_status()
+
+    search_result = response.json()
+    #print(search_result)
+
+    add_selected_movie = Movies_db(
+    id_num=search_result["id"], 
+    title=search_result["original_title"],
+    year=search_result["release_date"][:4],
+    description=search_result["overview"],
+    rating=4.6,
+    #ranking=8,
+    review="Lorem Ipsum",
+    img_url=f"https://image.tmdb.org/t/p/w500{search_result['poster_path']}"
+    )
 
 
-@app.route('/edit', methods=['GET', 'POST'])
-def edit_records():
+    with app.app_context():
+        db.session.add(add_selected_movie)
+        db.session.commit()
+    
+    return redirect(url_for('edit_records', id = search_result['id']))
+
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_records(id):
     # Get the book_id from the URL query string
-    movie_id = request.args.get('id', type=int)
+    movie_id = id
 
     # Load the book from the database
     with app.app_context():
@@ -179,10 +222,12 @@ def edit_records():
     if editform.validate_on_submit():
         rating = editform.edited_rating.data
         review = editform.edited_review.data
+        #ranking = editform.edited_ranking.data
 
         temp_rating = {
             "rating": rating,
-            "review": review
+            "review": review,
+            #"ranking" : ranking
         }
 
         # Load the book from the database
@@ -192,7 +237,10 @@ def edit_records():
             # rating dan movie pengganti
             movie_to_update.rating = temp_rating["rating"]
             movie_to_update.review = temp_rating["review"]
+            #movie_to_update.ranking = temp_rating['ranking']
             db.session.commit()
+
+        return redirect(url_for("home"))
 
     # Render the form for GET request
     return render_template("edit.html", movie=movie_to_update, form = editform)
