@@ -52,6 +52,7 @@ with app.app_context():
 def home():
     return render_template("index.html")
 
+# HTTP GET - Read Record
 @app.route("/all", methods = ["GET", "POST"])
 def get_all_cafe():
     result = db.session.execute(db.select(Cafe))
@@ -97,9 +98,71 @@ def get_random_cafe():
         }
     
     return jsonify(cafe=response_obj)
-# HTTP GET - Read Record
+
+@app.route("/search", methods= ["GET", "POST"])
+def search_cafe():
+    # Get the value of the 'loc' query parameter from the URL
+    query_location = request.args.get("loc")
+
+    result = db.session.execute(db.select(Cafe).where(Cafe.location == query_location))
+    selected_cafe = result.scalars().all()
+
+    response_list = []
+    for x in range(len(selected_cafe)):
+        response_obj = {
+            "id": selected_cafe[x].id,
+            "name": selected_cafe[x].name,
+            "map_url": selected_cafe[x].map_url,
+            "img_url": selected_cafe[x].img_url,
+            "location": selected_cafe[x].location,
+            "seats": selected_cafe[x].seats,
+            "has_toilet": selected_cafe[x].has_toilet,
+            "has_wifi": selected_cafe[x].has_wifi,
+            "has_sockets": selected_cafe[x].has_sockets,
+            "can_take_calls": selected_cafe[x].can_take_calls,
+            "coffee_price": selected_cafe[x].coffee_price
+        }
+        response_list.append(response_obj)
+        print(response_list)
+    
+    if selected_cafe:
+        return jsonify(cafe_all=response_list)
+    else:
+        # Return an error message and a 404 status code if no cafe is found
+        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."}), 404
+
+
+
 
 # HTTP POST - Create Record
+@app.route("/add", methods = ["GET", "POST"])
+def add_cafes():
+    try:
+        # Create a new Cafe object from the data sent in the POST request
+        new_cafe = Cafe(
+            name=request.form.get("name"),
+            map_url=request.form.get("map_url"),
+            img_url=request.form.get("img_url"),
+            location=request.form.get("location"),
+            seats=request.form.get("seats"),
+            has_toilet=bool(request.form.get("has_toilet")),
+            has_wifi=bool(request.form.get("has_wifi")),
+            has_sockets=bool(request.form.get("has_sockets")),
+            can_take_calls=bool(request.form.get("can_take_calls")),
+            coffee_price=request.form.get("coffee_price"),
+        )
+
+        # Add the new cafe to the database
+        db.session.add(new_cafe)
+        db.session.commit()
+
+        # Return a success message
+        return jsonify(response={"success": "Successfully added the new cafe."})
+
+    except Exception as e:
+        # Return an error message if something goes wrong
+        return jsonify(error={"Failed": str(e)}), 500
+
 
 # HTTP PUT/PATCH - Update Record
 
