@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean, func
+import random
+
 
 '''
 Install the required packages first: 
@@ -50,7 +52,51 @@ with app.app_context():
 def home():
     return render_template("index.html")
 
+@app.route("/all", methods = ["GET", "POST"])
+def get_all_cafe():
+    result = db.session.execute(db.select(Cafe))
+    all_cafe = result.scalars().all()
 
+    response_list = []
+    for x in range(len(all_cafe)):
+        response_obj = {
+            "id": all_cafe[x].id,
+            "name": all_cafe[x].name,
+            "map_url": all_cafe[x].map_url,
+            "img_url": all_cafe[x].img_url,
+            "location": all_cafe[x].location,
+            "seats": all_cafe[x].seats,
+            "has_toilet": all_cafe[x].has_toilet,
+            "has_wifi": all_cafe[x].has_wifi,
+            "has_sockets": all_cafe[x].has_sockets,
+            "can_take_calls": all_cafe[x].can_take_calls,
+            "coffee_price": all_cafe[x].coffee_price
+        }
+        response_list.append(response_obj)
+
+    return jsonify(cafe_all=response_list)
+
+@app.route("/random", methods = ["GET", "POST"])
+def get_random_cafe():
+    result = db.session.execute(db.select(Cafe))
+    all_cafes = result.scalars().all()
+    random_cafe = random.choice(all_cafes)
+
+    response_obj = {
+            "id": random_cafe.id,
+            "name": random_cafe.name,
+            "map_url": random_cafe.map_url,
+            "img_url": random_cafe.img_url,
+            "location": random_cafe.location,
+            "seats": random_cafe.seats,
+            "has_toilet": random_cafe.has_toilet,
+            "has_wifi": random_cafe.has_wifi,
+            "has_sockets": random_cafe.has_sockets,
+            "can_take_calls": random_cafe.can_take_calls,
+            "coffee_price": random_cafe.coffee_price,
+        }
+    
+    return jsonify(cafe=response_obj)
 # HTTP GET - Read Record
 
 # HTTP POST - Create Record
