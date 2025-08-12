@@ -165,8 +165,37 @@ def add_cafes():
 
 
 # HTTP PUT/PATCH - Update Record
+@app.route("/update-price/<int:id>", methods = ["GET", "POST"])
+def update_price(id):
+    try:
+        # Get the value of the 'id' query parameter from the URL
+        cafe_id_route = id
+        cafe_to_update = db.session.execute(db.select(Cafe).where(Cafe.id == cafe_id_route)).scalar()
+
+        # define the updated price
+        new_price = request.args.get("new_price")
+        cafe_to_update.coffee_price = new_price
+        db.session.commit() 
+
+        return jsonify(response={"success": "Successfully edit the coffee price."})
+    except Exception as e:
+        return jsonify(error={"Sorry a cafe with that id was not found in the database.": str(e)}), 400
 
 # HTTP DELETE - Delete Record
+@app.route("/report-closed/<int:cafe_id>", methods = ["DELETE"])
+def delete_cafe(cafe_id):
+    try:
+        if request.args.get("api-key") == "TopSecretAPIKey":
+            cafe_to_delete = db.session.execute(db.select(Cafe).where(Cafe.id == cafe_id)).scalar()
+
+            db.session.delete(cafe_to_delete)
+            db.session.commit()
+            return jsonify(response={"Success": "Record deleted."})
+        
+        elif request.args.get("api-key") != "TopSecretAPIKey":
+            return jsonify(error={"Sorry, that's not allowed. Make sure you have the correct api_key"})
+    except Exception as e:
+        return jsonify(error={"Sorry a cafe with that id was not found in the database.": str(e)}), 400
 
 
 if __name__ == '__main__':
