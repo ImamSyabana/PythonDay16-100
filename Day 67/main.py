@@ -34,6 +34,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
+# INITIALIZE CKEditor
+ckeditor = CKEditor(app)
 
 # CONFIGURE TABLE
 class BlogPost(db.Model):
@@ -49,6 +51,14 @@ class BlogPost(db.Model):
 with app.app_context():
     db.create_all()
 
+# create new post form
+class PostForm(FlaskForm):
+    title = StringField(label = 'Blog Post Title', validators=[DataRequired()])
+    subtitle = StringField(label = 'Blog Post Subtitle', validators=[DataRequired()])
+    name = StringField(label = 'Your name', validators=[DataRequired()])
+    blog_img_url = StringField(label = 'Blog Image URL', validators=[DataRequired()])
+    blog_content = CKEditorField(label = 'Blog Content', validators=[DataRequired()])
+    submit = SubmitField('Submit POST')
 
 @app.route('/')
 def get_all_posts():
@@ -83,7 +93,46 @@ def show_post(post_id):
 
 
 # TODO: add_new_post() to create a new blog post
+@app.route('/new-post', methods = ["GET","POST"])
+def add_new_post():
+    form = PostForm()
 
+    if form.validate_on_submit():
+        # yang merecord di kolom form
+        title = form.title.data
+        subtitle = form.subtitle.data
+        name = form.name.data
+        blog_img_url = form.blog_img_url.data
+        blog_content = form.blog_content.data
+        
+
+        # dictionary yang menyimpan nilai di kolom sementara 
+        temp_dict = {
+            "title" : title,
+            "subtitle" : subtitle,
+            "name" : name,
+            "blog_img_url" : blog_img_url,
+            "blog_content" : blog_content
+            
+        }
+
+        # menyiapkan records object untuk dimasukkan ke database
+        new_post_record = BlogPost(
+            title = temp_dict["title"],
+            subtitle = temp_dict["subtitle"],
+            author = temp_dict["name"],
+            img_url = temp_dict["blog_img_url"],
+            body = temp_dict["blog_content"],
+            date = (date.today()).strftime("%B %d, %Y")
+        )
+
+        # menambahkan data ke datatbase.
+        with app.app_context():
+            db.session.add(new_post_record)
+            db.session.commit()
+        
+        return redirect(url_for("get_all_posts"))
+    return render_template("make-post.html", form = form)
 # TODO: edit_post() to change an existing blog post
 
 # TODO: delete_post() to remove a blog post from the database
