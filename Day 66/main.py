@@ -192,8 +192,8 @@ def delete_cafe(cafe_id):
             db.session.commit()
             return jsonify(response={"Success": "Record deleted."})
         
-        elif request.args.get("api-key") != "TopSecretAPIKey":
-            return jsonify(error={"Sorry, that's not allowed. Make sure you have the correct api_key"})
+        else:
+            return jsonify(response={"Sorry, that's not allowed. Make sure you have the correct api_key"})
     except Exception as e:
         return jsonify(error={"Sorry a cafe with that id was not found in the database.": str(e)}), 400
 
