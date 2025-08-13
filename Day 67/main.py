@@ -55,9 +55,9 @@ with app.app_context():
 class PostForm(FlaskForm):
     title = StringField(label = 'Blog Post Title', validators=[DataRequired()])
     subtitle = StringField(label = 'Blog Post Subtitle', validators=[DataRequired()])
-    name = StringField(label = 'Your name', validators=[DataRequired()])
-    blog_img_url = StringField(label = 'Blog Image URL', validators=[DataRequired()])
-    blog_content = CKEditorField(label = 'Blog Content', validators=[DataRequired()])
+    author = StringField(label = 'Your name', validators=[DataRequired()])
+    img_url = StringField(label = 'Blog Image URL', validators=[DataRequired()])
+    body = CKEditorField(label = 'Blog Content', validators=[DataRequired()])
     submit = SubmitField('Submit POST')
 
 @app.route('/')
@@ -71,22 +71,22 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 # TODO: Add a route so that you can click on individual posts.
-@app.route('/<int:post_id>')
+@app.route('/post/<int:post_id>')
 def show_post(post_id):
     # TODO: Retrieve a BlogPost from the database based on the post_id
-    requested_post = "Grab the post from your database"
+    requested_post =    "Grab the post from your database"
 
-    result = db.session.execute(db.select(BlogPost))
-    all_posts = result.scalars().all()
+    requested_post = db.session.execute(db.select(BlogPost).where(BlogPost.id == post_id)).scalar()
+    #all_posts = result.scalars().all()
 
     selected_post = {
-        "id": all_posts[post_id-1].id,
-        "title":all_posts[post_id-1].title,
-        "date":all_posts[post_id-1].date,
-        "body":all_posts[post_id-1].body,
-        "author":all_posts[post_id-1].author,
-        "img_url":all_posts[post_id-1].img_url,
-        "subtitle":all_posts[post_id-1].subtitle,
+        "id": requested_post.id,
+        "title":requested_post.title,
+        "date":requested_post.date,
+        "body":requested_post.body,
+        "author":requested_post.author,
+        "img_url":requested_post.img_url,
+        "subtitle":requested_post.subtitle,
     }
 
     return render_template("post.html", post=selected_post)
@@ -101,18 +101,18 @@ def add_new_post():
         # yang merecord di kolom form
         title = form.title.data
         subtitle = form.subtitle.data
-        name = form.name.data
-        blog_img_url = form.blog_img_url.data
-        blog_content = form.blog_content.data
+        author = form.author.data
+        img_url = form.img_url.data
+        body = form.body.data
         
 
         # dictionary yang menyimpan nilai di kolom sementara 
         temp_dict = {
             "title" : title,
             "subtitle" : subtitle,
-            "name" : name,
-            "blog_img_url" : blog_img_url,
-            "blog_content" : blog_content
+            "author" : author,
+            "img_url" : img_url,
+            "body" : body
             
         }
 
@@ -120,9 +120,9 @@ def add_new_post():
         new_post_record = BlogPost(
             title = temp_dict["title"],
             subtitle = temp_dict["subtitle"],
-            author = temp_dict["name"],
-            img_url = temp_dict["blog_img_url"],
-            body = temp_dict["blog_content"],
+            author = temp_dict["author"],
+            img_url = temp_dict["img_url"],
+            body = temp_dict["body"],
             date = (date.today()).strftime("%B %d, %Y")
         )
 
@@ -132,10 +132,68 @@ def add_new_post():
             db.session.commit()
         
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form = form)
+    return render_template("make-post.html", form = form, is_edit = False)
+
 # TODO: edit_post() to change an existing blog post
+@app.route('/edit-post/<int:post_id>', methods = ["GET","POST"])
+def edit_post(post_id):
+    postID= post_id
+
+    # check the post available from database
+    post_to_update =db.get_or_404(BlogPost, postID)
+
+    editform = PostForm(
+        title=post_to_update.title,
+        subtitle=post_to_update.subtitle,
+        img_url=post_to_update.img_url,
+        author=post_to_update.author,
+        body=post_to_update.body
+    )
+
+    if editform.validate_on_submit():
+        # yang merecord di kolom form
+        title = editform.title.data
+        subtitle = editform.subtitle.data
+        author = editform.author.data
+        img_url = editform.img_url.data
+        body = editform.body.data
+
+        edit_temp_dict = {
+            "title" : title,
+            "subtitle" : subtitle,
+            "author" : author,
+            "img_url" : img_url,
+            "body" : body
+        }
+
+        # load the original post from the database
+        with app.app_context():
+            # post yang diupdatte 
+            post_to_update = db.session.execute(db.select(BlogPost).where(BlogPost.id == postID)).scalar()
+            # value pengganti
+            post_to_update.title = edit_temp_dict["title"]
+            post_to_update.subtitle = edit_temp_dict["subtitle"]
+            post_to_update.author = edit_temp_dict["author"]
+            post_to_update.img_url = edit_temp_dict["img_url"]
+            post_to_update.body = edit_temp_dict["body"]
+
+            db.session.commit()
+
+        return redirect(url_for("get_all_posts"))
+    return render_template("make-post.html", form = editform, is_edit = True)
 
 # TODO: delete_post() to remove a blog post from the database
+@app.route('/delete/<int:post_id>', methods = ["GET","POST"])
+def delete_post(post_id):
+    postID= post_id
+
+    # Load the book from the database
+    with app.app_context():
+        # records yang mau dihapus
+        post_to_delete = db.session.execute(db.select(BlogPost).where(BlogPost.id == postID)).scalar()
+        db.session.delete(post_to_delete)
+        db.session.commit()
+    return redirect(url_for('get_all_posts'))
 
 # Below is the code from previous lessons. No changes needed.
 @app.route("/about")

@@ -213,7 +213,7 @@ def edit_records(id):
     # Get the book_id from the URL query string
     movie_id = id
 
-    # Load the book from the database
+    # check the post available from database
     with app.app_context():
         movie_to_update = db.get_or_404(Movies_db, movie_id)
 
