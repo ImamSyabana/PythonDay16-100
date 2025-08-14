@@ -23,8 +23,13 @@ class RegisterForm(FlaskForm):
     email = StringField(label = "Email", validators = [DataRequired()])
     name = StringField(label = "Name", validators = [DataRequired()])
     password = PasswordField(label = "Password", validators = [DataRequired()])
-    submit = SubmitField('Submit POST')
+    submit = SubmitField('SIGN ME UP!')
 
+#Create a LoginForm to login existed users
+class LoginForm(FlaskForm):
+    email = StringField(label = "Email", validators = [DataRequired()])
+    password = PasswordField(label = "Password", validators = [DataRequired()])
+    submit = SubmitField('LET ME IN!')
 
 
 @app.route("/register", methods = ["GET", "POST"])

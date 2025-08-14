@@ -11,7 +11,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 # Import your forms from the forms.py
 from forms import CreatePostForm
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm
 
 '''
 Make sure the required packages are installed: 
@@ -128,13 +128,40 @@ def register():
 
 
 # TODO: Retrieve a user from the database based on their email. 
-@app.route('/login')
+@app.route('/login', methods = ["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+
+    if request.method == "POST":
+        # mengambil yang ada di kolom input HTML
+        email = form.email.data
+        password = form.password.data
+
+        # mengambil data user yang ada di database
+        user_to_login = db.session.execute(db.Select(User).where(User.email == email)).scalar()
+
+        # Login and validate the user.
+        # user should be an instance of your `User` class
+        # Check if the user exists and the password is correct
+        if not(user_to_login):
+            # Handle invalid credentials
+            flash('Invalid email. Please try again.', 'error')
+            return redirect(url_for('login'))
+        elif check_password_hash(user_to_login.password, password) == False:
+            # Handle invalid credentials
+            flash('Invalid password. Please try again.', 'error')
+            return redirect(url_for('login'))
+        else:
+            #flash('You were successfully logged in!', 'success')
+            login_user(user_to_login)
+            return redirect(url_for("get_all_posts"))
+        
+    return render_template("login.html", form = form)
 
 
 @app.route('/logout')
 def logout():
+    logout_user()
     return redirect(url_for('get_all_posts'))
 
 
