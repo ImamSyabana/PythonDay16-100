@@ -37,7 +37,7 @@ with app.app_context():
 class RegistForm(FlaskForm):
     email = StringField(label = "Email", validators = [DataRequired()])
     name = StringField(label = "Name", validators = [DataRequired()])
-    password = StringField(label = "Password", validators = [DataRequired()])
+    password = PasswordField(label = "Password", validators = [DataRequired()])
     submit = SubmitField('Submit POST')
 
 
