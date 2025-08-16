@@ -25,22 +25,21 @@ class RegisterForm(FlaskForm):
     password = PasswordField(label = "Password", validators = [DataRequired()])
     submit = SubmitField('SIGN ME UP!')
 
-#Create a LoginForm to login existed users
-class LoginForm(FlaskForm):
-    email = StringField(label = "Email", validators = [DataRequired()])
-    password = PasswordField(label = "Password", validators = [DataRequired()])
-    submit = SubmitField('LET ME IN!')
 
-class CommentForm(FlaskForm):
-    comment = CKEditorField(label = 'Comment', validators=[DataRequired()])
-    submit = SubmitField('SUBMIT COMMENT')
-    
+
 @app.route("/register", methods = ["GET", "POST"])
 def regist_user():
     pass
     
 
 # TODO: Create a LoginForm to login existing users
-
+#Create a LoginForm to login existed users
+class LoginForm(FlaskForm):
+    email = StringField(label = "Email", validators = [DataRequired()])
+    password = PasswordField(label = "Password", validators = [DataRequired()])
+    submit = SubmitField('LET ME IN!')
 
 # TODO: Create a CommentForm so users can leave comments below posts
+class CommentForm(FlaskForm):
+    text = CKEditorField(label = 'Comment', validators=[DataRequired()])
+    submit = SubmitField('SUBMIT COMMENT')

@@ -12,6 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # Import your forms from the forms.py
 from forms import CreatePostForm
 from forms import RegisterForm, LoginForm, CommentForm
+from bs4 import BeautifulSoup
 
 '''
 Make sure the required packages are installed: 
@@ -59,7 +60,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
-
+# create gravatar 
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=False,
+                    base_url=None)
 
 # TODO: Create a User table for all your registered users. 
 class User(UserMixin, db.Model):
@@ -104,6 +113,9 @@ class Comment(db.Model):
 
     author: Mapped["User"] = relationship(back_populates="comments")
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    post_id: Mapped[int] = mapped_column(ForeignKey("blog_posts.id"))
+
 
 with app.app_context():
     db.create_all()
@@ -215,16 +227,38 @@ def get_all_posts():
 
 
 # TODO: Allow logged-in users to comment on posts
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     form = CommentForm()
 
     if form.validate_on_submit():
-        comment = form.comment.data
+        if current_user.is_authenticated:
+            comment_input = Comment(
+                author_id = current_user.id,
+                text = form.text.data,
+                post_id = post_id
+            )
 
+            db.session.add(comment_input)
+            db.session.commit()
+            #return redirect(url_for("get_all_posts"))
+
+        else:
+            flash('You need to login or register to comment.', 'error')
+            return redirect(url_for('login'))
+
+    # show all who comment on the post 
+    commenters = db.session.execute(db.select(Comment).where(Comment.post_id == post_id)).scalars().all()
+
+    # Show all comments related to the post
+    post_comments = db.session.execute(db.select(Comment).where(Comment.post_id == post_id)).scalars().all()
+    wo_html_post_comments = []
+    for post in (post_comments):
+        cleaned_text = BeautifulSoup(post.text, "html.parser").get_text()
+        wo_html_post_comments.append({'author': post.author, 'text': cleaned_text})
 
     requested_post = db.get_or_404(BlogPost, post_id)
-    return render_template("post.html", post=requested_post)
+    return render_template("post.html", post=requested_post, comment_form = form, comment_text = wo_html_post_comments)
 
 
 # TODO: Use a decorator so only an admin user can create a new post
