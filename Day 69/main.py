@@ -56,6 +56,7 @@ def load_user(id):
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
@@ -220,7 +221,7 @@ def get_all_posts():
 
     # data yang ada di tabel user
     
-    user_results = db.session.execute(db.Select(User))
+    user_results = db.session.execute(db.select(User))
     users = user_results.scalars().all()
 
     return render_template("index.html", all_posts=posts, users = users)
