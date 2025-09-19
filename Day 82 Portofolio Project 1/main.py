@@ -38,8 +38,7 @@ letter_to_morse = {
     "0" : "- - - - -",
 }
 
-#querry_input_str = input("Please input the text: \n")
-querry_input_str = 'hello!'
+querry_input_str = input("Please input the text: \n")
 
 translated_letters = []
 for char in querry_input_str:
