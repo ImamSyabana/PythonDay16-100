@@ -53,4 +53,4 @@ for char in querry_input_str:
 
 
 translated_str = "  ".join(translated_letters)
-print(translated_str)
+print(translated_str) # printing the morse code result 
