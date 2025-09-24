@@ -1,0 +1,81 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    height:80px;
+    align-content: center;
+
+    background-color: lightskyblue;
+}
+
+@media (min-width: 300px) and (max-width: 600px){
+    .header{
+        height:200px;
+    }
+  }
+
+@media (max-width: 300px){
+.header{
+    height:400px;
+}
+}
+
+.NavText{
+    font-weight: 600;
+    color: whitesmoke;
+    font-family:sans-serif;
+    margin-top: 15px;
+
+}
+
+.navButton{
+    background-color: darkturquoise;
+    width: 120px;
+    height: 40px;
+
+    border-radius: 10%;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    
+}
+
+h1{
+    font-family:'Times New Roman', Times, serif;
+}
+
+.picsEdu{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 10px solid darkturquoise;
+   
+}
+
+.card{
+    
+    border-color: aqua;
+}
+
+.eduRowCenter {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    text-align: center; /* Ensures text is centered */
+    flex-wrap: wrap; /* Ensures responsiveness */
+  }
+  
+.imgFooter{
+    
+    border: 3px solid;
+    border-color: black;
+}
+
+.card-text-justify {
+  text-align: justify;
+}
