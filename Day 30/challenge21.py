@@ -21,5 +21,5 @@ def count_likes(posts):
     return total_likes
 
 
-count_likes(facebook_posts)
+print(count_likes(facebook_posts))
 

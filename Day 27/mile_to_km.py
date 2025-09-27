@@ -8,7 +8,7 @@ window.minsize(width=240, height= 140)
 window.config(padx =20, pady = 20)
 
 # menambahkan padding
-window.config()
+#window.config()
 
 # Create a label (component)
 my_label = tkinter.Label(text = "is equal to")
