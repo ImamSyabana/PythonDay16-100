@@ -43,7 +43,7 @@ def known_words():
         df_dict = pd.DataFrame(dict_words)
         
         # saving the dataframe
-        df_dict.to_csv('Day 31/data/words_to_learn.csv', header=False, index=False)
+        df_dict.to_csv('Day 31/data/words_to_learn.csv', header=True, index=False)
         
         rand_words = random.randint(0, len(words_data) - 1)
     
@@ -51,6 +51,7 @@ def known_words():
         # If no words left, handle accordingly (e.g., show a message)
         messagebox.showinfo("Congratulations!", "You've learned all the words!")
         rand_words = None
+
 # for the randomizer button
 def pick_random_words():
     global rand_words
@@ -66,7 +67,7 @@ def pick_random_words():
 
 # ------------------------------ UI -------------------------------------------------
 window = tkinter.Tk()
-window.title("Flashy")
+window.title("Flashy")#dsa
 window.config(padx = 50, pady = 50)
 window.config(bg=BACKGROUND_COLOR)
 
