@@ -67,7 +67,7 @@ def pick_random_words():
 
 # ------------------------------ UI -------------------------------------------------
 window = tkinter.Tk()
-window.title("Flashy")#dsa
+window.title("Flashy")
 window.config(padx = 50, pady = 50)
 window.config(bg=BACKGROUND_COLOR)
 
