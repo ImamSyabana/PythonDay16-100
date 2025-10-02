@@ -50,7 +50,7 @@ while True:
         player_input = input(f"{turn['name']} please choose a grid to fill with a {'X' if turn['move_symbol'] == False else 'O'}! (e.g. B2): ")
         player_input = player_input.upper().replace(" ", "")
         
-        # --- THE FIX IS HERE ---
+        
         # 1. Get the (row, col) tuple from our new map
         if player_input in coordinate_map:
             row, col = coordinate_map[player_input]
