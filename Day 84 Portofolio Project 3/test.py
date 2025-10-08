@@ -1,5 +1,4 @@
-# The game board. It's better to name it something like 'game_board'
-# because it won't be empty for long!
+
 game_board = [
     [[None],[None],[None]],
     [[None],[None],[None]],
