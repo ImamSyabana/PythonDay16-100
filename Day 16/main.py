@@ -12,16 +12,3 @@ print(my_screen.canvheight)
 my_screen.exitonclick()
 
 #reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
-#reboisasi
