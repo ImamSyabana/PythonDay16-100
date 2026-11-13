@@ -4,8 +4,6 @@ from turtle import Turtle, Screen
 #reboisasi
 #reboisasi
 #reboisasi
-#reboisasi
- 
  
  
 
